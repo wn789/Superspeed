@@ -4,7 +4,7 @@
 #
 # Copyright (C) 2017 - 2017 Oldking <oooldking@gmail.com>
 #
-# URL: https://www.oldking.net/305.html
+# URL: https://www.wn789.com/9504.html
 #
 
 # Colors
@@ -52,9 +52,9 @@ fi
 clear
 echo "#############################################################"
 echo "# Description: Test your server's network with Speedtest    #"
-echo "# Intro:  https://www.oldking.net/305.html                  #"
+echo "# Intro:  https://www.wn789.com/9504.html                   #"
 echo "# Author: Oldking <oooldking@gmail.com>                     #"
-echo "# Github: https://github.com/oooldking                      #"
+echo "# Github: https://github.com/wn789                          #"
 echo "#############################################################"
 echo
 echo "测试服务器到"
