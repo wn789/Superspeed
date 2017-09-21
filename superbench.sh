@@ -177,31 +177,31 @@ tram=$( free -m | awk '/Mem/ {print $2}' )
 uram=$( free -m | awk '/Mem/ {print $3}' )
 swap=$( free -m | awk '/Swap/ {print $2}' )
 uswap=$( free -m | awk '/Swap/ {print $3}' )
-up=$( awk '{a=$1/86400;b=($1%86400)/3600;c=($1%3600)/60} {printf("%d days %d hour %d min\n",a,b,c)}' /proc/uptime )
+up=$( awk '{a=$1/86400;b=($1%86400)/3600;c=($1%3600)/60} {printf("%d days, %d hour %d min\n",a,b,c)}' /proc/uptime )
 load=$( w | head -1 | awk -F'load average:' '{print $2}' | sed 's/^[ \t]*//;s/[ \t]*$//' )
 opsy=$( get_opsy )
 arch=$( uname -m )
 lbit=$( getconf LONG_BIT )
 kern=$( uname -r )
 ipv6=$( wget -qO- -t1 -T2 ipv6.icanhazip.com )
-disk_size1=($( LANG=C df -hPl | grep -wvE '\-|none|tmpfs|devtmpfs|by-uuid|chroot|Filesystem' | awk '{print $2}' ))
-disk_size2=($( LANG=C df -hPl | grep -wvE '\-|none|tmpfs|devtmpfs|by-uuid|chroot|Filesystem' | awk '{print $3}' ))
+disk_size1=($( LANG=C df -ahPl | grep -wvE '\-|none|tmpfs|devtmpfs|by-uuid|chroot|Filesystem' | awk '{print $2}' ))
+disk_size2=($( LANG=C df -ahPl | grep -wvE '\-|none|tmpfs|devtmpfs|by-uuid|chroot|Filesystem' | awk '{print $3}' ))
 disk_total_size=$( calc_disk ${disk_size1[@]} )
 disk_used_size=$( calc_disk ${disk_size2[@]} )
 
 clear
 next
-echo -e "CPU model            : ${SKYBLUE}$cname${PLAIN}"
-echo -e "Number of cores      : ${SKYBLUE}$cores${PLAIN}"
-echo -e "CPU frequency        : ${SKYBLUE}$freq MHz${PLAIN}"
-echo -e "Total size of Disk   : ${SKYBLUE}$disk_total_size GB ($disk_used_size GB Used)${PLAIN}"
-echo -e "Total amount of Mem  : ${SKYBLUE}$tram MB ($uram MB Used)${PLAIN}"
-echo -e "Total amount of Swap : ${SKYBLUE}$swap MB ($uswap MB Used)${PLAIN}"
-echo -e "System uptime        : ${SKYBLUE}$up${PLAIN}"
-echo -e "Load average         : ${SKYBLUE}$load${PLAIN}"
-echo -e "OS                   : ${SKYBLUE}$opsy${PLAIN}"
-echo -e "Arch                 : ${SKYBLUE}$arch ($lbit Bit)${PLAIN}"
-echo -e "Kernel               : ${SKYBLUE}$kern${PLAIN}"
+echo "CPU model            : $cname"
+echo "Number of cores      : $cores"
+echo "CPU frequency        : $freq MHz"
+echo "Total size of Disk   : $disk_total_size GB ($disk_used_size GB Used)"
+echo "Total amount of Mem  : $tram MB ($uram MB Used)"
+echo "Total amount of Swap : $swap MB ($uswap MB Used)"
+echo "System uptime        : $up"
+echo "Load average         : $load"
+echo "OS                   : $opsy"
+echo "Arch                 : $arch ($lbit Bit)"
+echo "Kernel               : $kern"
 next
 echo -n "I/O speed( 64M )     : "
 io1=$( io_test 64k 1k )
