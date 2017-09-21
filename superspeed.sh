@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 #
-# Description: One step to test your server's network
+# Description: Test your server's network with Speedtest to China
 #
 # Copyright (C) 2017 - 2017 Oldking <oooldking@gmail.com>
 #
-# URL: https://www.wn789.com/9504.html
+# URL: https://www.wn789.com/
 #
 
 # Colors
@@ -52,9 +52,9 @@ fi
 clear
 echo "#############################################################"
 echo "# Description: Test your server's network with Speedtest    #"
-echo "# Intro:  https://www.wn789.com/9504.html                   #"
+echo "# Intro:  https://www.wn789.com/9504.html             #"
 echo "# Author: Oldking <oooldking@gmail.com>                     #"
-echo "# Github: https://github.com/wn789                          #"
+echo "# Github: https://github.com/wn789/Superspeed                   #"
 echo "#############################################################"
 echo
 echo "测试服务器到"
@@ -339,7 +339,7 @@ fi
 
 # install speedtest
 if  [ ! -e './speedtest.py' ]; then
-    wget https://raw.github.com/sivel/speedtest-cli/master/speedtest.py > /dev/null 2>&1
+    wget https://raw.githubusercontent.com/wn789/speedtest-cli/master/speedtest.py > /dev/null 2>&1
 fi
 chmod a+rx speedtest.py
 
@@ -398,8 +398,6 @@ if [[ ${telecom} == 5 ]]; then
 	echo ""
 	printf "%-14s%-18s%-20s%-12s\n" "Node Name" "Upload Speed" "Download Speed" "Latency"
 	start=$(date +%s) 
-    speed_test '1111' '测试节点'
-    speed_test '1122' '测试节点'
 	speed_test '12637' '襄阳电信'
     speed_test '5081' '深圳电信'
 	speed_test '3633' '上海电信'
