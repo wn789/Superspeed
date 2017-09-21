@@ -111,6 +111,16 @@ speed() {
 	rm -rf speedtest.py
 }
 
+get_opsy() {
+    [ -f /etc/redhat-release ] && awk '{print ($1,$3~/^[0-9]/?$3:$4)}' /etc/redhat-release && return
+    [ -f /etc/os-release ] && awk -F'[= "]' '/PRETTY_NAME/{print $3,$4,$5}' /etc/os-release && return
+    [ -f /etc/lsb-release ] && awk -F'[="]+' '/DESCRIPTION/{print $2}' /etc/lsb-release && return
+}
+
+next() {
+    printf "%-70s\n" "-" | sed 's/\s/-/g'
+}
+
 speed_test() {
     local speedtest=$(wget -4O /dev/null -T300 $1 2>&1 | awk '/\/dev\/null/ {speed=$3 $4} END {gsub(/\(|\)/,"",speed); print speed}')
     local ipaddress=$(ping -c1 -n `awk -F'/' '{print $3}' <<< $1` | awk -F'[()]' '{print $2;exit}')
@@ -149,6 +159,7 @@ speed_v6() {
     speed_test_v6 'http://speedtest.tok02.softlayer.com/downloads/test100.zip' 'Softlayer, Tokyo, JP'
 }
 
+
 io_test() {
     (LANG=C dd if=/dev/zero of=test_$$ bs=$1 count=$2 conv=fdatasync && rm -f test_$$ ) 2>&1 | awk -F, '{io=$NF} END { print io}' | sed 's/^[ \t]*//;s/[ \t]*$//'
 }
@@ -177,31 +188,31 @@ tram=$( free -m | awk '/Mem/ {print $2}' )
 uram=$( free -m | awk '/Mem/ {print $3}' )
 swap=$( free -m | awk '/Swap/ {print $2}' )
 uswap=$( free -m | awk '/Swap/ {print $3}' )
-up=$( awk '{a=$1/86400;b=($1%86400)/3600;c=($1%3600)/60} {printf("%d days, %d hour %d min\n",a,b,c)}' /proc/uptime )
+up=$( awk '{a=$1/86400;b=($1%86400)/3600;c=($1%3600)/60} {printf("%d days %d hour %d min\n",a,b,c)}' /proc/uptime )
 load=$( w | head -1 | awk -F'load average:' '{print $2}' | sed 's/^[ \t]*//;s/[ \t]*$//' )
 opsy=$( get_opsy )
 arch=$( uname -m )
 lbit=$( getconf LONG_BIT )
 kern=$( uname -r )
 ipv6=$( wget -qO- -t1 -T2 ipv6.icanhazip.com )
-disk_size1=($( LANG=C df -ahPl | grep -wvE '\-|none|tmpfs|devtmpfs|by-uuid|chroot|Filesystem' | awk '{print $2}' ))
-disk_size2=($( LANG=C df -ahPl | grep -wvE '\-|none|tmpfs|devtmpfs|by-uuid|chroot|Filesystem' | awk '{print $3}' ))
+disk_size1=($( LANG=C df -hPl | grep -wvE '\-|none|tmpfs|devtmpfs|by-uuid|chroot|Filesystem' | awk '{print $2}' ))
+disk_size2=($( LANG=C df -hPl | grep -wvE '\-|none|tmpfs|devtmpfs|by-uuid|chroot|Filesystem' | awk '{print $3}' ))
 disk_total_size=$( calc_disk ${disk_size1[@]} )
 disk_used_size=$( calc_disk ${disk_size2[@]} )
 
 clear
 next
-echo "CPU model            : $cname"
-echo "Number of cores      : $cores"
-echo "CPU frequency        : $freq MHz"
-echo "Total size of Disk   : $disk_total_size GB ($disk_used_size GB Used)"
-echo "Total amount of Mem  : $tram MB ($uram MB Used)"
-echo "Total amount of Swap : $swap MB ($uswap MB Used)"
-echo "System uptime        : $up"
-echo "Load average         : $load"
-echo "OS                   : $opsy"
-echo "Arch                 : $arch ($lbit Bit)"
-echo "Kernel               : $kern"
+echo -e "CPU model            : ${SKYBLUE}$cname${PLAIN}"
+echo -e "Number of cores      : ${SKYBLUE}$cores${PLAIN}"
+echo -e "CPU frequency        : ${SKYBLUE}$freq MHz${PLAIN}"
+echo -e "Total size of Disk   : ${SKYBLUE}$disk_total_size GB ($disk_used_size GB Used)${PLAIN}"
+echo -e "Total amount of Mem  : ${SKYBLUE}$tram MB ($uram MB Used)${PLAIN}"
+echo -e "Total amount of Swap : ${SKYBLUE}$swap MB ($uswap MB Used)${PLAIN}"
+echo -e "System uptime        : ${SKYBLUE}$up${PLAIN}"
+echo -e "Load average         : ${SKYBLUE}$load${PLAIN}"
+echo -e "OS                   : ${SKYBLUE}$opsy${PLAIN}"
+echo -e "Arch                 : ${SKYBLUE}$arch ($lbit Bit)${PLAIN}"
+echo -e "Kernel               : ${SKYBLUE}$kern${PLAIN}"
 next
 echo -n "I/O speed( 64M )     : "
 io1=$( io_test 64k 1k )
