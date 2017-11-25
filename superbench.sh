@@ -6,7 +6,7 @@
 #
 # Thanks: Bench.sh <i@teddysun.com>
 #
-# URL: https://www.wn789.com/9504.html
+# URL: https://www.oldking.net/350.html
 #
 
 # Colors
@@ -114,7 +114,7 @@ speed_test(){
 speed() {
 	# install speedtest
 	if  [ ! -e './speedtest.py' ]; then
-	    wget https://raw.githubusercontent.com/wn789/speedtest-cli/master/speedtest.py > /dev/null 2>&1
+	    wget https://raw.github.com/sivel/speedtest-cli/master/speedtest.py > /dev/null 2>&1
 	fi
 	chmod a+rx speedtest.py
 
@@ -209,12 +209,14 @@ echo -ne "Virt                 : "
 # install virt-what
 if  [ ! -e '/usr/sbin/virt-what' ]; then
     if [ "${release}" == "centos" ]; then
+    	yum update > /dev/null 2>&1
         yum -y install virt-what > /dev/null 2>&1
     else
+    	apt-get update > /dev/null 2>&1
         apt-get -y install virt-what > /dev/null 2>&1
     fi      
 fi
-virtua=$(virt-what)
+virtua=$(virt-what) 2>/dev/null
 
 if [[ ${virtua} ]]; then
 	echo -e "${SKYBLUE}$virtua${PLAIN}"

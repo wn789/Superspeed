@@ -4,7 +4,7 @@
 #
 # Copyright (C) 2017 - 2017 Oldking <oooldking@gmail.com>
 #
-# URL: https://www.wn789.com/
+# URL: https://www.oldking.net/305.html
 #
 
 # Colors
@@ -52,9 +52,9 @@ fi
 clear
 echo "#############################################################"
 echo "# Description: Test your server's network with Speedtest    #"
-echo "# Intro:  https://www.wn789.com/9504.html                   #"
+echo "# Intro:  https://www.oldking.net/305.html                  #"
 echo "# Author: Oldking <oooldking@gmail.com>                     #"
-echo "# Github: https://github.com/wn789/Superspeed               #"
+echo "# Github: https://github.com/oooldking                      #"
 echo "#############################################################"
 echo
 echo "测试服务器到"
@@ -339,7 +339,7 @@ fi
 
 # install speedtest
 if  [ ! -e './speedtest.py' ]; then
-    wget https://raw.githubusercontent.com/wn789/speedtest-cli/master/speedtest.py > /dev/null 2>&1
+    wget https://raw.github.com/sivel/speedtest-cli/master/speedtest.py > /dev/null 2>&1
 fi
 chmod a+rx speedtest.py
 
