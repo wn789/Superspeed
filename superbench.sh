@@ -38,33 +38,37 @@ fi
 
 # check python
 if  [ ! -e '/usr/bin/python' ]; then
-        echo -e
-        read -p "${RED}Error:${PLAIN} python is not install. You must be install python command at first.\nDo you want to install? [y/n]" is_install
-        if [[ ${is_install} == "y" || ${is_install} == "Y" ]]; then
+        #echo -e
+        #read -p "${RED}Error:${PLAIN} python is not install. You must be install python command at first.\nDo you want to install? [y/n]" is_install
+        #if [[ ${is_install} == "y" || ${is_install} == "Y" ]]; then
             if [ "${release}" == "centos" ]; then
+            			yum update > /dev/null 2>&1
                         yum -y install python
                 else
+                		apt-get update > /dev/null 2>&1
                         apt-get -y install python
                 fi
-        else
-            exit
-        fi
+        #else
+        #    exit
+        #fi
         
 fi
 
 # check wget
 if  [ ! -e '/usr/bin/wget' ]; then
-        echo -e
-        read -p "${RED}Error:${PLAIN} wget is not install. You must be install wget command at first.\nDo you want to install? [y/n]" is_install
-        if [[ ${is_install} == "y" || ${is_install} == "Y" ]]; then
+        #echo -e
+        #read -p "${RED}Error:${PLAIN} wget is not install. You must be install wget command at first.\nDo you want to install? [y/n]" is_install
+        #if [[ ${is_install} == "y" || ${is_install} == "Y" ]]; then
                 if [ "${release}" == "centos" ]; then
+                		yum update > /dev/null 2>&1
                         yum -y install wget
                 else
+                		apt-get update > /dev/null 2>&1
                         apt-get -y install wget
                 fi
-        else
-                exit
-        fi
+        #else
+        #        exit
+        #fi
 fi
 
 get_opsy() {
@@ -161,8 +165,10 @@ install_smart() {
 	# install smartctl
 	if  [ ! -e '/usr/sbin/smartctl' ]; then
 	    if [ "${release}" == "centos" ]; then
+	    	yum update > /dev/null 2>&1
 	        yum -y install smartmontools > /dev/null 2>&1
 	    else
+	    	apt-get update > /dev/null 2>&1
 	        apt-get -y install smartmontools > /dev/null 2>&1
 	    fi      
 	fi
