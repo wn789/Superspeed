@@ -338,16 +338,16 @@ if [[ ${telecom} == 3 ]]; then
 fi
 
 # install speedtest
-if  [ ! -e './speedtest.py' ]; then
-    wget https://raw.github.com/sivel/speedtest-cli/master/speedtest.py > /dev/null 2>&1
+if  [ ! -e '/tmp/speedtest.py' ]; then
+    wget --no-check-certificate -P /tmp https://raw.github.com/sivel/speedtest-cli/master/speedtest.py > /dev/null 2>&1
 fi
-chmod a+rx speedtest.py
+chmod a+rx /tmp/speedtest.py
 
 result() {
-    download=`cat speed.log | awk -F ':' '/Download/{print $2}'`
-    upload=`cat speed.log | awk -F ':' '/Upload/{print $2}'`
-    hostby=`cat speed.log | awk -F ':' '/Hosted/{print $1}'`
-    latency=`cat speed.log | awk -F ':' '/Hosted/{print $2}'`
+    download=`cat /tmp/speed.log | awk -F ':' '/Download/{print $2}'`
+    upload=`cat /tmp/speed.log | awk -F ':' '/Upload/{print $2}'`
+    hostby=`cat /tmp/speed.log | awk -F ':' '/Hosted/{print $1}'`
+    latency=`cat /tmp/speed.log | awk -F ':' '/Hosted/{print $2}'`
     clear
     echo "$hostby"
     echo "延迟  : $latency"
@@ -358,7 +358,7 @@ result() {
 }
 
 speed_test(){
-	temp=$(python speedtest.py --server $1 --share 2>&1)
+	temp=$(python /tmp/speedtest.py --server $1 --share 2>&1)
 	is_down=$(echo "$temp" | grep 'Download') 
 	if [[ ${is_down} ]]; then
         local REDownload=$(echo "$temp" | awk -F ':' '/Download/{print $2}')
@@ -377,45 +377,45 @@ speed_test(){
 }
 
 if [[ ${telecom} =~ ^[1-3]$ ]]; then
-    python speedtest.py --server ${num} --share 2>/dev/null | tee speed.log 2>/dev/null
-    is_down=$(cat speed.log | grep 'Download')
+    python /tmp/speedtest.py --server ${num} --share 2>/dev/null | tee /tmp/speed.log 2>/dev/null
+    is_down=$(cat /tmp/speed.log | grep 'Download')
 
     if [[ ${is_down} ]]; then
         result
         echo "测试到 ${cityName}${telecomName} 完成！"
-        rm -rf speedtest.py
-        rm -rf speed.log
+        rm -rf /tmp/speedtest.py
+        rm -rf /tmp/speed.log
     else
 	    echo -e "\n${RED}ERROR:${PLAIN} 当前节点不可用，请更换其他节点，或换个时间段再测试。"
 	fi
 fi
 
 if [[ ${telecom} == 4 ]]; then
-    python speedtest.py | tee speed.log
+    python /tmp/speedtest.py | tee /tmp/speed.log
     result
     echo "本地测试完成！"
-    rm -rf speedtest.py
-    rm -rf speed.log
+    rm -rf /tmp/speedtest.py
+    rm -rf /tmp/speed.log
 fi
 
 if [[ ${telecom} == 5 ]]; then
 	echo ""
 	printf "%-14s%-18s%-20s%-12s\n" "Node Name" "Upload Speed" "Download Speed" "Latency"
 	start=$(date +%s) 
-	speed_test '12637' '襄阳电信'
-    speed_test '5081' '深圳电信'
+    speed_test '6435' '襄阳电信'
+    speed_test '7509' '昆明电信'
 	speed_test '3633' '上海电信'
 	speed_test '4624' '成都电信'
 	speed_test '5017' '沈阳联通'
 	speed_test '4863' '西安联通'
 	speed_test '5083' '上海联通'
 	speed_test '5726' '重庆联通'
-	speed_test '5192' '西安移动'
-	speed_test '4665' '上海移动'
+	speed_test '5292' '西安移动'
+	speed_test '16314' '山东移动'
     speed_test '6715' '宁波移动'
 	speed_test '4575' '成都移动'
 	end=$(date +%s)  
-	rm -rf speedtest.py
+	rm -rf /tmp/speedtest.py
 	echo ""
 	time=$(( $end - $start ))
 	if [[ $time -gt 60 ]]; then
