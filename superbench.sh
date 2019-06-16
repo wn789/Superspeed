@@ -172,15 +172,6 @@ benchinit() {
 	# start
 	start=$(date +%s) 
 	
-fi
-
-# Colors
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[0;33m'
-BLUE='\033[0;36m'
-PLAIN='\033[0m'
-
 get_opsy() {
     [ -f /etc/redhat-release ] && awk '{print ($1,$3~/^[0-9]/?$3:$4)}' /etc/redhat-release && return
     [ -f /etc/os-release ] && awk -F'[= "]' '/PRETTY_NAME/{print $3,$4,$5}' /etc/os-release && return
@@ -305,7 +296,6 @@ speed_v4 && next
 if [[ "$ipv6" != "" ]]; then
     printf "%-32s%-24s%-14s\n" "Node Name" "IPv6 address" "Download Speed"
     speed_v6 && next
-fi
 }
 
 get_opsy() {
