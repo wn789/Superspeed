@@ -2,11 +2,11 @@
 #
 # Description: Auto system info & I/O test & network to China script
 #
-# Copyright (C) 2017 - 2018 Oldking <oooldking@gmail.com>
+# Copyright (C) 2019 woniu <www.wn789.com>
 #
-# Thanks: Bench.sh <i@teddysun.com>
+# Thanks: Bench.sh <i@teddysun.com>、Oldking <Superbench.sh>
 #
-# URL: https://www.oldking.net/350.html
+# URL: https://www.wn789.com/9504.html
 #
 
 # Colors
@@ -22,7 +22,7 @@ about() {
 	echo " \                 Superbench.sh  Script                 / "
 	echo " \       Basic system info, I/O test and speedtest       / "
 	echo " \                   v2.0.0  (2019.6.16)                 / "
-	echo " \            Created by Oldking And by woniu            / "
+	echo " \           Created by Oldking And by wn789.com         / "
 	echo " ========================================================= "
 	echo ""
 	echo " Intro: https://www.wn789.com/9504.html"
@@ -232,56 +232,6 @@ speed_test(){
 
 print_speedtest() {
 	printf "%-18s%-18s%-20s%-12s\n" " Node Name" "Upload Speed" "Download Speed" "Latency" | tee -a $log
-    speed_test '' 'Speedtest.net'
-    speed_fast_com
-    speed_test '24011' 'Wuhan1        CT'
-    speed_test '23844' 'Wuhan         CT'
-    speed_test '5317' 'Lianyungang   CT'
-    speed_test '7509' 'Hangzhou      CT'
-    speed_test '5316' 'Nanjing       CT'
-    speed_test '5396' 'Suzhou        CT'
-    speed_test '17145' 'Hefei         CT'
-    speed_test '23844' 'Wuhan2        CT'
-    speed_test '17251' 'Guangzhou     CT'
-    speed_test '19076' 'ChongQing     CT'
-    speed_test '3973' 'Lanzhou       CT'
-    speed_test '12637' 'Xiangyang     CT'
-    speed_test '25316' 'Tianjin       CU'
-    speed_test '5103' 'Kunming       CU'
-    speed_test '2461' 'Chengdu       CU'
-    speed_test '5674' 'Nanning       CU'
-    speed_test '4690' 'Lanzhou       CU'
-    speed_test '5726' 'Chongqing     CU'
-    speed_test '5509' 'Ningxia       CU'
-    speed_test '5485' 'Wuhan         CU'
-    speed_test '5724' 'Hefei         CU'
-    speed_test '5145' 'Beijing       CU'
-    speed_test '13704' 'Nanjing       CU'
-    speed_test '24447' 'ShangHai      CU'
-    speed_test '21005' 'Shanghai      CU'
-    speed_test '24447' 'ShangHai5G    CU'
-    speed_test '5083' 'Shanghai      CU'
-    speed_test '9484' 'Changchun     CU'
-    speed_test '4863' 'Xi an         CU'
-    speed_test '4713' 'Beijing       CM'
-    speed_test '4647' 'Hangzhou      CM'
-    speed_test '6715' 'Ningbo        CM'
-    speed_test '16719' 'Shanghai      CM'
-    speed_test '16803' 'Shanghai      CM'
-    speed_test '4665' 'Shanghai      CM'
-    speed_test '16167' 'Shenyang      CM'
-    speed_test '4575' 'Chengdu       CM'
-    speed_test '6168' 'Kunming       CM'
-    speed_test '6611' 'Guangzhou     CM'
-    speed_test '17245' 'Kashi         CM'
-    speed_test '17227' 'Hetian        CM'
-    speed_test '17228' 'Yili          CM'
-    speed_test '18444' 'Lasa          CM'
-    speed_test '16858' 'Wulumuqi      CM'
-    speed_test '15863' 'Nanning       CM'
-    speed_test '16145' 'Lanzhou       CM'
-    speed_test '5563' 'Jinan           '
-    speed_test '22145' 'Shanghai    ESUN'
     speed_test '5530' 'Chongqing    CCN'
 	 
 	rm -rf speedtest.py
