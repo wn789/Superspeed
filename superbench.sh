@@ -246,6 +246,7 @@ print_speedtest() {
     speed_test '19076' 'ChongQing     CT'
     speed_test '3973' 'Lanzhou       CT'
     speed_test '12637' 'Xiangyang     CT'
+    speed_test '25316' 'Tianjin       CU'
     speed_test '5103' 'Kunming       CU'
     speed_test '2461' 'Chengdu       CU'
     speed_test '5674' 'Nanning       CU'
@@ -280,8 +281,8 @@ print_speedtest() {
     speed_test '15863' 'Nanning       CM'
     speed_test '16145' 'Lanzhou       CM'
     speed_test '5563' 'Jinan           '
-    speed_test '22145' 'Shanghai        '
-    speed_test '5530' 'Chongqing       '
+    speed_test '22145' 'Shanghai    ESUN'
+    speed_test '5530' 'Chongqing    CCN'
 	 
 	rm -rf speedtest.py
 }
