@@ -183,34 +183,6 @@ next() {
     printf "%-70s\n" "-" | sed 's/\s/-/g' | tee -a $log
 }
 
-speed_test() {
-    local speedtest=$(wget -4O /dev/null -T300 $1 2>&1 | awk '/\/dev\/null/ {speed=$3 $4} END {gsub(/\(|\)/,"",speed); print speed}')
-    local ipaddress=$(ping -c1 -n `awk -F'/' '{print $3}' <<< $1` | awk -F'[()]' '{print $2;exit}')
-    local nodeName=$2
-    local latency=$(ping $ipaddress -c 3 | grep avg | awk -F / '{print $5}')" ms"
-    printf "${YELLOW}%-26s${GREEN}%-18s${RED}%-20s${SKYBLUE}%-12s${PLAIN}\n" "${nodeName}" "${ipaddress}" "${speedtest}" "${latency}"
-
-    #Record Speed Data
-    echo ${ipaddress} >> /tmp/speed.txt
-    echo ${speedtest} >> /tmp/speed.txt
-    echo ${latency} >> /tmp/speed.txt
-}
-
-speed() {
-    speed_test 'http://cachefly.cachefly.net/100mb.test' 'CacheFly'
-    speed_test 'http://speedtest.tokyo.linode.com/100MB-tokyo.bin' 'Linode, Tokyo, JP'
-    speed_test 'http://speedtest.singapore.linode.com/100MB-singapore.bin' 'Linode, Singapore, SG'
-    speed_test 'http://speedtest.london.linode.com/100MB-london.bin' 'Linode, London, UK'
-    speed_test 'http://speedtest.frankfurt.linode.com/100MB-frankfurt.bin' 'Linode, Frankfurt, DE'
-    speed_test 'http://speedtest.fremont.linode.com/100MB-fremont.bin' 'Linode, Fremont, CA'
-    speed_test 'http://speedtest.dal05.softlayer.com/downloads/test100.zip' 'Softlayer, Dallas, TX'
-    speed_test 'http://speedtest.sea01.softlayer.com/downloads/test100.zip' 'Softlayer, Seattle, WA'
-    speed_test 'http://speedtest.fra02.softlayer.com/downloads/test100.zip' 'Softlayer, Frankfurt, DE'
-    speed_test 'http://speedtest.sng01.softlayer.com/downloads/test100.zip' 'Softlayer, Singapore, SG'
-    speed_test 'http://speedtest.hkg02.softlayer.com/downloads/test100.zip' 'Softlayer, HongKong, CN'
-}
-
-
 speed_test(){
 	if [[ $1 == '' ]]; then
 		temp=$(python speedtest.py --share 2>&1)
