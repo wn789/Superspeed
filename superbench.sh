@@ -269,11 +269,6 @@ speed_fast_com() {
 
 }
 
-
-next() {
-    printf "%-70s\n" "-" | sed 's/\s/-/g'
-}
-
 speed_test_v4() {
     local speedtest=$(wget -4O /dev/null -T300 $1 2>&1 | awk '/\/dev\/null/ {speed=$3 $4} END {gsub(/\(|\)/,"",speed); print speed}')
     local ipaddress=$(ping -c1 -n `awk -F'/' '{print $3}' <<< $1` | awk -F'[()]' '{print $2;exit}')
@@ -315,7 +310,6 @@ speed_v6() {
     speed_test_v6 'http://speedtest.tok02.softlayer.com/downloads/test100.zip' 'Softlayer, Tokyo, JP'
 }
 
-clear
 next
 printf "%-32s%-24s%-14s\n" "Node Name" "IPv4 address" "Download Speed"
 speed_v4 && next
