@@ -284,6 +284,7 @@ speed_test_v6() {
 }
 
 speed_v4() {
+    printf "%-32s%-24s%-14s\n" "Node Name" "IPv4 address" "Download Speed"
     speed_test_v4 'http://cachefly.cachefly.net/100mb.test' 'CacheFly'
     speed_test_v4 'http://speedtest.tokyo.linode.com/100MB-tokyo.bin' 'Linode, Tokyo, JP'
     speed_test_v4 'http://speedtest.singapore.linode.com/100MB-singapore.bin' 'Linode, Singapore, SG'
@@ -298,6 +299,7 @@ speed_v4() {
 }
 
 speed_v6() {
+    printf "%-32s%-24s%-14s\n" "Node Name" "IPv6 address" "Download Speed"
     speed_test_v6 'http://speedtest.atlanta.linode.com/100MB-atlanta.bin' 'Linode, Atlanta, GA'
     speed_test_v6 'http://speedtest.dallas.linode.com/100MB-dallas.bin' 'Linode, Dallas, TX'
     speed_test_v6 'http://speedtest.newark.linode.com/100MB-newark.bin' 'Linode, Newark, NJ'
@@ -309,13 +311,6 @@ speed_v6() {
     speed_test_v6 'http://speedtest.sng01.softlayer.com/downloads/test100.zip' 'Softlayer, Singapore, SG'
     speed_test_v6 'http://speedtest.tok02.softlayer.com/downloads/test100.zip' 'Softlayer, Tokyo, JP'
 }
-
-next
-printf "%-32s%-24s%-14s\n" "Node Name" "IPv4 address" "Download Speed"
-speed_v4 && next
-if [[ "$ipv6" != "" ]]; then
-    printf "%-32s%-24s%-14s\n" "Node Name" "IPv6 address" "Download Speed"
-    speed_v6 && next
 
 io_test() {
     (LANG=C dd if=/dev/zero of=test_file_$$ bs=512K count=$1 conv=fdatasync && rm -f test_file_$$ ) 2>&1 | awk -F, '{io=$NF} END { print io}' | sed 's/^[ \t]*//;s/[ \t]*$//'
