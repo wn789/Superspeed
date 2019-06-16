@@ -183,19 +183,8 @@ next() {
     printf "%-70s\n" "-" | sed 's/\s/-/g' | tee -a $log
 }
 
-speed_test() {
-    local speedtest=$(wget -4O /dev/null -T300 $1 2>&1 | awk '/\/dev\/null/ {speed=$3 $4} END {gsub(/\(|\)/,"",speed); print speed}')
-    local ipaddress=$(ping -c1 -n `awk -F'/' '{print $3}' <<< $1` | awk -F'[()]' '{print $2;exit}')
-    local nodeName=$2
-    local latency=$(ping $ipaddress -c 3 | grep avg | awk -F / '{print $5}')" ms"
-    printf "${YELLOW}%-26s${GREEN}%-18s${RED}%-20s${SKYBLUE}%-12s${PLAIN}\n" "${nodeName}" "${ipaddress}" "${speedtest}" "${latency}"
-
-    #Record Speed Data
-    echo ${ipaddress} >> /tmp/speed.txt
-    echo ${speedtest} >> /tmp/speed.txt
-    echo ${latency} >> /tmp/speed.txt
-    
-    if [[ $1 == '' ]]; then
+speed_test(){
+	if [[ $1 == '' ]]; then
 		temp=$(python speedtest.py --share 2>&1)
 		is_down=$(echo "$temp" | grep 'Download')
 		result_speed=$(echo "$temp" | awk -F ' ' '/results/{print $3}')
@@ -241,23 +230,58 @@ speed_test() {
 	fi
 }
 
-speed() {
-    speed_test 'http://cachefly.cachefly.net/100mb.test' 'CacheFly'
-    speed_test 'http://speedtest.tokyo.linode.com/100MB-tokyo.bin' 'Linode, Tokyo, JP'
-    speed_test 'http://speedtest.singapore.linode.com/100MB-singapore.bin' 'Linode, Singapore, SG'
-    speed_test 'http://speedtest.london.linode.com/100MB-london.bin' 'Linode, London, UK'
-    speed_test 'http://speedtest.frankfurt.linode.com/100MB-frankfurt.bin' 'Linode, Frankfurt, DE'
-    speed_test 'http://speedtest.fremont.linode.com/100MB-fremont.bin' 'Linode, Fremont, CA'
-    speed_test 'http://speedtest.dal05.softlayer.com/downloads/test100.zip' 'Softlayer, Dallas, TX'
-    speed_test 'http://speedtest.sea01.softlayer.com/downloads/test100.zip' 'Softlayer, Seattle, WA'
-    speed_test 'http://speedtest.fra02.softlayer.com/downloads/test100.zip' 'Softlayer, Frankfurt, DE'
-    speed_test 'http://speedtest.sng01.softlayer.com/downloads/test100.zip' 'Softlayer, Singapore, SG'
-    speed_test 'http://speedtest.hkg02.softlayer.com/downloads/test100.zip' 'Softlayer, HongKong, CN'
-}
- 	
 print_speedtest() {
 	printf "%-18s%-18s%-20s%-12s\n" " Node Name" "Upload Speed" "Download Speed" "Latency" | tee -a $log
     speed_test '' 'Speedtest.net'
+    speed_fast_com
+    speed_test '24011' 'Wuhan1        CT'
+    speed_test '23844' 'Wuhan         CT'
+    speed_test '5317' 'Lianyungang   CT'
+    speed_test '7509' 'Hangzhou      CT'
+    speed_test '5316' 'Nanjing       CT'
+    speed_test '5396' 'Suzhou        CT'
+    speed_test '17145' 'Hefei         CT'
+    speed_test '23844' 'Wuhan2        CT'
+    speed_test '17251' 'Guangzhou     CT'
+    speed_test '19076' 'ChongQing     CT'
+    speed_test '3973' 'Lanzhou       CT'
+    speed_test '12637' 'Xiangyang     CT'
+    speed_test '25316' 'Tianjin       CU'
+    speed_test '5103' 'Kunming       CU'
+    speed_test '2461' 'Chengdu       CU'
+    speed_test '5674' 'Nanning       CU'
+    speed_test '4690' 'Lanzhou       CU'
+    speed_test '5726' 'Chongqing     CU'
+    speed_test '5509' 'Ningxia       CU'
+    speed_test '5485' 'Wuhan         CU'
+    speed_test '5724' 'Hefei         CU'
+    speed_test '5145' 'Beijing       CU'
+    speed_test '13704' 'Nanjing       CU'
+    speed_test '24447' 'ShangHai      CU'
+    speed_test '21005' 'Shanghai      CU'
+    speed_test '24447' 'ShangHai5G    CU'
+    speed_test '5083' 'Shanghai      CU'
+    speed_test '9484' 'Changchun     CU'
+    speed_test '4863' 'Xi an         CU'
+    speed_test '4713' 'Beijing       CM'
+    speed_test '4647' 'Hangzhou      CM'
+    speed_test '6715' 'Ningbo        CM'
+    speed_test '16719' 'Shanghai      CM'
+    speed_test '16803' 'Shanghai      CM'
+    speed_test '4665' 'Shanghai      CM'
+    speed_test '16167' 'Shenyang      CM'
+    speed_test '4575' 'Chengdu       CM'
+    speed_test '6168' 'Kunming       CM'
+    speed_test '6611' 'Guangzhou     CM'
+    speed_test '17245' 'Kashi         CM'
+    speed_test '17227' 'Hetian        CM'
+    speed_test '17228' 'Yili          CM'
+    speed_test '18444' 'Lasa          CM'
+    speed_test '16858' 'Wulumuqi      CM'
+    speed_test '15863' 'Nanning       CM'
+    speed_test '16145' 'Lanzhou       CM'
+    speed_test '5563' 'Jinan           '
+    speed_test '22145' 'Shanghai    ESUN'
     speed_test '5530' 'Chongqing    CCN'
 	 
 	rm -rf speedtest.py
@@ -292,6 +316,57 @@ speed_fast_com() {
 	rm -rf fast_com_example_usage.py
 	rm -rf fast_com.py
 
+}
+
+get_opsy() {
+    [ -f /etc/redhat-release ] && awk '{print ($1,$3~/^[0-9]/?$3:$4)}' /etc/redhat-release && return
+    [ -f /etc/os-release ] && awk -F'[= "]' '/PRETTY_NAME/{print $3,$4,$5}' /etc/os-release && return
+    [ -f /etc/lsb-release ] && awk -F'[="]+' '/DESCRIPTION/{print $2}' /etc/lsb-release && return
+}
+
+next() {
+    printf "%-70s\n" "-" | sed 's/\s/-/g'
+}
+
+speed_test_v4() {
+    local speedtest=$(wget -4O /dev/null -T300 $1 2>&1 | awk '/\/dev\/null/ {speed=$3 $4} END {gsub(/\(|\)/,"",speed); print speed}')
+    local ipaddress=$(ping -c1 -n `awk -F'/' '{print $3}' <<< $1` | awk -F'[()]' '{print $2;exit}')
+    local nodeName=$2
+    printf "${YELLOW}%-32s${GREEN}%-24s${RED}%-14s${PLAIN}\n" "${nodeName}" "${ipaddress}" "${speedtest}"
+}
+
+speed_test_v6() {
+    local speedtest=$(wget -6O /dev/null -T300 $1 2>&1 | awk '/\/dev\/null/ {speed=$3 $4} END {gsub(/\(|\)/,"",speed); print speed}')
+    local ipaddress=$(ping6 -c1 -n `awk -F'/' '{print $3}' <<< $1` | awk -F'[()]' '{print $2;exit}')
+    local nodeName=$2
+    printf "${YELLOW}%-32s${GREEN}%-24s${RED}%-14s${PLAIN}\n" "${nodeName}" "${ipaddress}" "${speedtest}"
+}
+
+speed_v4() {
+    speed_test_v4 'http://cachefly.cachefly.net/100mb.test' 'CacheFly'
+    speed_test_v4 'http://speedtest.tokyo.linode.com/100MB-tokyo.bin' 'Linode, Tokyo, JP'
+    speed_test_v4 'http://speedtest.singapore.linode.com/100MB-singapore.bin' 'Linode, Singapore, SG'
+    speed_test_v4 'http://speedtest.london.linode.com/100MB-london.bin' 'Linode, London, UK'
+    speed_test_v4 'http://speedtest.frankfurt.linode.com/100MB-frankfurt.bin' 'Linode, Frankfurt, DE'
+    speed_test_v4 'http://speedtest.fremont.linode.com/100MB-fremont.bin' 'Linode, Fremont, CA'
+    speed_test_v4 'http://speedtest.dal05.softlayer.com/downloads/test100.zip' 'Softlayer, Dallas, TX'
+    speed_test_v4 'http://speedtest.sea01.softlayer.com/downloads/test100.zip' 'Softlayer, Seattle, WA'
+    speed_test_v4 'http://speedtest.fra02.softlayer.com/downloads/test100.zip' 'Softlayer, Frankfurt, DE'
+    speed_test_v4 'http://speedtest.sng01.softlayer.com/downloads/test100.zip' 'Softlayer, Singapore, SG'
+    speed_test_v4 'http://speedtest.hkg02.softlayer.com/downloads/test100.zip' 'Softlayer, HongKong, CN'
+}
+
+speed_v6() {
+    speed_test_v6 'http://speedtest.atlanta.linode.com/100MB-atlanta.bin' 'Linode, Atlanta, GA'
+    speed_test_v6 'http://speedtest.dallas.linode.com/100MB-dallas.bin' 'Linode, Dallas, TX'
+    speed_test_v6 'http://speedtest.newark.linode.com/100MB-newark.bin' 'Linode, Newark, NJ'
+    speed_test_v6 'http://speedtest.singapore.linode.com/100MB-singapore.bin' 'Linode, Singapore, SG'
+    speed_test_v6 'http://speedtest.tokyo.linode.com/100MB-tokyo.bin' 'Linode, Tokyo, JP'
+    speed_test_v6 'http://speedtest.sjc03.softlayer.com/downloads/test100.zip' 'Softlayer, San Jose, CA'
+    speed_test_v6 'http://speedtest.wdc01.softlayer.com/downloads/test100.zip' 'Softlayer, Washington, WA'
+    speed_test_v6 'http://speedtest.par01.softlayer.com/downloads/test100.zip' 'Softlayer, Paris, FR'
+    speed_test_v6 'http://speedtest.sng01.softlayer.com/downloads/test100.zip' 'Softlayer, Singapore, SG'
+    speed_test_v6 'http://speedtest.tok02.softlayer.com/downloads/test100.zip' 'Softlayer, Tokyo, JP'
 }
 
 io_test() {
